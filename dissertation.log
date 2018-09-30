@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.12)  30 SEP 2018 17:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.12)  30 SEP 2018 22:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2125,10 +2125,7 @@ Package biblatex Info: ... file 'english.lbx' found.
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
 File: english.lbx 2017/12/19 v3.10 biblatex localization (PK/JW/AB)
 ))
-(./dissertation.aux (./Dissertation/title.aux) (./Dissertation/contents.aux)
-(./Dissertation/acronyms.aux) (./Dissertation/introduction.aux)
-(./Dissertation/part1.aux) (./Dissertation/part2.aux) (./Dissertation/part3.aux
-) (./Dissertation/conclusion.aux) (./Dissertation/references.aux)
+(./dissertation.aux (./Dissertation/part1.aux) (./Dissertation/references.aux)
 \c@totalcount@figure@totc=\count487
 \c@totalcount@table@totc=\count488
 \c@TotPages@totc=\count489
@@ -2158,7 +2155,6 @@ Package nag Info: Command \RaggedLeft not defined, skipping amendment on input
 line 34.
 Package nag Info: Command \RaggedRight not defined, skipping amendment on input
  line 34.
-
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count490
@@ -2252,9 +2248,8 @@ Package biblatex Info: Data encoding 'utf8' specified.
 \openout7 = `dissertation.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'dissertation.bbl' not found.
-
-No file dissertation.bbl.
+Package biblatex Info: ... file 'dissertation.bbl' found.
+ (./dissertation.bbl)
 Package biblatex Info: Reference section=0 on input line 34.
 Package biblatex Info: Reference segment=0 on input line 34.
 Package nag Info: Command \caption@xlabel not defined, skipping amendment on in
@@ -2267,92 +2262,8 @@ Package nag Info: Command \hc@caption not defined, skipping amendment on input
 line 34.
 Package nag Info: Command \topcaption not defined, skipping amendment on input 
 line 34.
+
 (./common/renames.tex)
-\openout2 = `Dissertation/title.aux'.
-
- (./Dissertation/title.tex<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
-LaTeX Font Info:    Try loading font information for U+msa on input line 58.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 58.
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 72.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 72.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 72.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 72.
- [1.1
-
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
-\openout2 = `Dissertation/contents.aux'.
-
- (./Dissertation/contents.tex
-(./dissertation.toc<<t1.cmap>>
-Package cleveref Info: loaded `russian' language definitions on input line 3.
-))
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 40.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 40.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 40.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 40.
- [2.2
-
-
-]
-\openout2 = `Dissertation/acronyms.aux'.
-
- (./Dissertation/acronyms.tex
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 2.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 2.
-)
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 41.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 41.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 41.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 41.
- [3.3
-
-
-
-]
-\openout2 = `Dissertation/introduction.aux'.
-
-
-(./Dissertation/introduction.tex
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 2.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 2.
-)
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 42.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 42.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 42.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 42.
- [4.4
-
-
-
-]
 \openout2 = `Dissertation/part1.aux'.
 
  (./Dissertation/part1.tex
@@ -2360,88 +2271,74 @@ Package babel Info: Redefining russian shorthand "|
 (babel)             in language  on input line 1.
 Package babel Info: Redefining russian shorthand "~
 (babel)             in language  on input line 1.
-)
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 43.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 43.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 43.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 43.
- [5.5
-
-
-
-]
-\openout2 = `Dissertation/part2.aux'.
-
-
-(./Dissertation/part2.tex
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 1.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 1.
-)
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 44.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 44.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 44.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 44.
- [6.6
-
-
-
-]
-\openout2 = `Dissertation/part3.aux'.
-
- (./Dissertation/part3.tex
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 1.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 1.
-)
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 45.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 45.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 45.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 45.
- [7.7
-
-
-
-]
-\openout2 = `Dissertation/conclusion.aux'.
-
-
-(./Dissertation/conclusion.tex
 Package babel Info: Redefining russian shorthand "|
 (babel)             in language  on input line 2.
 Package babel Info: Redefining russian shorthand "~
 (babel)             in language  on input line 2.
-)
 Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 46.
+(babel)             in language  on input line 19.
 Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 46.
+(babel)             in language  on input line 19.
 Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 46.
+(babel)             in language  on input line 19.
 Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 46.
- [8.8
+(babel)             in language  on input line 19.
+ [1.1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 
 ]
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 37.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 37.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 37.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 37.
+ [2.2]
+Underfull \hbox (badness 3260) in paragraph at lines 39--40
+[]\T2A/cmr/m/n/14.4 Данные ин^^?дек^^?сы ис^^?поль^^?зу^^?ют^^?ся гра^^?фо^^?вы
+^^?ми ба^^?за^^?ми дан^^?ных (Neo4j,
+ []
+
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 51.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 51.
+<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
+LaTeX Font Info:    Try loading font information for U+msa on input line 52.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 52.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+))
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 43.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 43.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 43.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 43.
+ [3.3]
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 43.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 43.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 43.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 43.
+ [4.4]
 \openout2 = `Dissertation/references.aux'.
 
- (./Dissertation/references.tex
+
+(./Dissertation/references.tex
 
 Package biblatex Warning: Keyword 'bibliofull' not found on input line 6.
 
@@ -2456,41 +2353,34 @@ LaTeX Warning: Empty bibliography on input line 6.
 
 )
 No complaints by nag.
-\tf@toc=\write9
-\openout9 = `dissertation.toc'.
-
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 52.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 52.
-(./dissertation.aux (./Dissertation/title.aux)
+(./dissertation.aux (./Dissertation/part1.aux)<<t1.cmap>>
 Package cleveref Info: loaded `russian' language definitions on input line 27.
- (./Dissertation/contents.aux)
-(./Dissertation/acronyms.aux) (./Dissertation/introduction.aux)
-(./Dissertation/part1.aux) (./Dissertation/part2.aux) (./Dissertation/part3.aux
-) (./Dissertation/conclusion.aux) (./Dissertation/references.aux))
+
+(./Dissertation/references.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 52.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 52.
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: 951588CBF97B351E64AC603A5409E835;957.
+(rerunfilecheck)             Checksum: 4FCF4051B41DC745100D7736F7BCCB1D;751.
 Package logreq Info: Writing requests to 'dissertation.run.xml'.
 \openout1 = `dissertation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 40929 strings out of 493671
- 717700 string characters out of 6151077
- 1484874 words of memory out of 5000000
- 43568 multiletter control sequences out of 15000+600000
- 12013 words of font info for 36 fonts, out of 8000000 for 9000
+ 40821 strings out of 493671
+ 715615 string characters out of 6151077
+ 1455287 words of memory out of 5000000
+ 43514 multiletter control sequences out of 15000+600000
+ 10391 words of font info for 34 fonts, out of 8000000 for 9000
  811 hyphenation exceptions out of 8191
- 63i,11n,56p,1014b,2510s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 63i,12n,56p,1014b,2443s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/oleg/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.600pk>
- </home/oleg/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1728.600pk> <
-/home/oleg/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </h
-ome/oleg/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk>
-Output written on dissertation.pdf (8 pages, 57437 bytes).
+ </home/oleg/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk>
+Output written on dissertation.pdf (4 pages, 66669 bytes).
 PDF statistics:
- 246 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
+ 232 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
  16 named destinations out of 1000 (max. 500000)
- 85 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
