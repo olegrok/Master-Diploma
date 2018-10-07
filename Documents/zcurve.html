@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Z-Order Curve</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
+
+  body {
+      background: #fff;
+  }
+  
+  .brush .extent {
+    stroke: #fff;
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+  }
+
+  </style>
+  </head>
+  <body>
+  <script type="text/javascript">
+
+  var w = 1200,
+      h = 800,
+      scale = 8;
+  
+  var brush = d3.svg.brush()
+      .x(d3.scale.identity().domain([0, w]))
+      .y(d3.scale.identity().domain([0, h]))
+      .on("brush", brushed)
+      .extent([[100, 100], [200, 200]]);
+
+  // http://stackoverflow.com/questions/4909263/how-to-efficiently-de-interleave-bits-inverse-morton
+  deinterleave = function(x)
+  {
+      x = x & 0x55555555;
+      x = (x | (x >> 1)) & 0x33333333;
+      x = (x | (x >> 2)) & 0x0F0F0F0F;
+      x = (x | (x >> 4)) & 0x00FF00FF;
+      x = (x | (x >> 8)) & 0x0000FFFF;
+      return x;
+  }
+  
+  // http://graphics.stanford.edu/~seander/bithacks.html#InterleaveBMN
+  interleave = function(x, y) {
+    
+    var B = [0x55555555, 0x33333333, 0x0F0F0F0F, 0x00FF00FF];
+    var S = [1, 2, 4, 8];
+
+    x = (x | (x << S[3])) & B[3];
+    x = (x | (x << S[2])) & B[2];
+    x = (x | (x << S[1])) & B[1];
+    x = (x | (x << S[0])) & B[0];
+
+    y = (y | (y << S[3])) & B[3];
+    y = (y | (y << S[2])) & B[2];
+    y = (y | (y << S[1])) & B[1];
+    y = (y | (y << S[0])) & B[0];
+
+    z = x | (y << 1);
+    return z;
+  }
+  
+  // Builds the x,y points for the z curve with the given range of values
+  buildCurve = function(startZ, endZ) {
+    
+    var curve = [];
+    
+    for ( var z = startZ; z < endZ; ++z ) {
+      var x = deinterleave(z);
+      var y = deinterleave(z >> 1);
+      curve.push( {"x" : x*scale, "y" : y*scale} );
+    }
+    
+    return curve;
+  }
+  
+   var lineFunction = d3.svg.line()
+                              .x(function(d) { return d.x; })
+                              .y(function(d) { return d.y; })
+                              .interpolate("linear");
+
+  var svg = d3.select("body").append("svg")
+                               .attr("width", w)
+                               .attr("height", h);
+  
+  svg.append("path")
+    .attr("d", lineFunction( buildCurve(0, 30000) ))
+    .attr("stroke", "#333")
+    .attr("stroke-width", 1)
+    .attr("fill", "none");
+    
+  svg.append("path")
+    .attr("class", "scanned")
+    .attr("stroke", "#f00")
+    .attr("stroke-width", 1)
+    .attr("fill", "none");
+      
+  svg.append("g")
+    .attr("class", "brush")
+    .call(brush);
+  
+  brushed();
+
+  function brushed() {
+    var extent = brush.extent();
+
+  // get the z values for the extent
+    zUL = zFromPoint( Math.round(extent[0][0]/scale), Math.round(extent[0][1]/scale) );
+    zLR = zFromPoint( Math.round(extent[1][0]/scale), Math.round(extent[1][1]/scale) );
+    
+	// Set the data for the scanned path
+    svg.selectAll(".scanned")
+      .attr("d", lineFunction( buildCurve(zUL, zLR) ))
+  }
+  
+  function zFromPoint(x, y) {
+    return interleave(x, y);
+  }
+
+    </script>
+  </body>
+</html>
