@@ -6,26 +6,24 @@ dims = 2
 steps = 3
 maximal_bp = dims * steps
 # From low to high
-lower_bound = '001011'[::-1]
-upper_bound = '110010'[::-1]
-
+lower_bound = '00001011'[::-1]
+upper_bound = '00110010'[::-1]
 
 def bit_position(dim, step):
-    return dims * (steps - step - 1) + (dims - 1 - dim)
-
+    return dims * step + dim
 
 def get_dimension(bit_pos):
-    return dims - 1 - bit_pos % dims
+    return bit_pos % dims
 
 
 def get_step(bit_pos):
-    return steps - 1 - (bit_pos // dims)
+    return bit_pos // dims
 
 
 def next_jmp_in(z_value):
 
     flag = [0, 0]
-    out_step = [inf, inf]
+    out_step = [-inf, -inf]
     save_min = [-1, -1]
     save_max = [-1, -1]
 
@@ -60,16 +58,17 @@ def next_jmp_in(z_value):
     if in_qb:
         return z_value
 
-    min_out_step = 99999
-    min_dim = 9999
+    max_out_step = -1
+    max_dim = -1
 
-    for i in range(dims):
-        if out_step[i] < min_out_step:
-            min_out_step = out_step[i]
-            min_dim = i
+    for i in range(dims - 1, -1, -1):
+        if out_step[i] > max_out_step:
+            max_out_step = out_step[i]
+            max_dim = i
 
-    max_bp = bit_position(min_dim, min_out_step)
-    if flag[min_dim] == 1:
+    max_bp = bit_position(max_dim, max_out_step)
+
+    if flag[max_dim] == 1:
         for new_bp in range(max_bp, maximal_bp):
             if get_step(new_bp) <= save_max[get_dimension(new_bp)] and z_value[new_bp] == '0':
                 max_bp = new_bp
@@ -104,29 +103,49 @@ def next_jmp_in(z_value):
     return z_value
 
 
-test = {
-    '001011': '001011',  # 0.2.3
-    '001100': '001110',  # 0.3.0
-    '001101': '001110',  # 0.3.1
-    '001110': '001110',  # 0.3.2
-    '001111': '001111',  # 0.3.3
-    '010000': '011010',  # 1.0.0 -> 1.2.2
-    '010001': '011010',  # 1.0.1 -> 1.2.2
-    '010010': '011010',  # 1.0.2 -> 1.2.2
-    '010011': '011010',  # 1.0.3 -> 1.2.2
-    '011000': '011010',  # 1.2.0 -> 1.2.2
-    '011001': '011010',  # 1.2.1 -> 1.2.2
-    '011011': '100001',  # 1.2.3 -> 2.0.1
-    '011111': '100001',  # 1.3.3 -> 2.0.1
-    '101000': '110000',  # 2.2.0 -> 3.0.0
-    '101111': '110000',  # 2.3.3 -> 3.0.0
-    '110001': '110010',  # 3.0.1 -> 3.0.2
+test1 = {
+    '00001011': '00001011',  # 0.2.3
+    '00001100': '00001110',  # 0.3.0
+    '00001101': '00001110',  # 0.3.1
+    '00001110': '00001110',  # 0.3.2
+    '00001111': '00001111',  # 0.3.3
+    '00010000': '00011010',  # 1.0.0 -> 1.2.2
+    '00010001': '00011010',  # 1.0.1 -> 1.2.2
+    '00010010': '00011010',  # 1.0.2 -> 1.2.2
+    '00010011': '00011010',  # 1.0.3 -> 1.2.2
+    '00011000': '00011010',  # 1.2.0 -> 1.2.2
+    '00011001': '00011010',  # 1.2.1 -> 1.2.2
+    '00011011': '00100001',  # 1.2.3 -> 2.0.1
+    '00011111': '00100001',  # 1.3.3 -> 2.0.1
+    '00101000': '00110000',  # 2.2.0 -> 3.0.0
+    '00101111': '00110000',  # 2.3.3 -> 3.0.0
+    '00110001': '00110010',  # 3.0.1 -> 3.0.2
 }
 
-for k, v in test.items():
+for k, v in test1.items():
     nji = next_jmp_in(k[::-1])
     if nji == v[::-1]:
         print('OK: {} -> {}'.format(k, nji[::-1]))
     else:
         print('FAIL: {} -> {}. Got: {}'.format(k, v, nji[::-1]))
+
+
+lower_bound = '001011'[::-1]
+upper_bound = '100101'[::-1]
+test2 = {
+    '001011': '001011',  # 0.2.3
+    '010000': '100001',  # 1.0.0 -> 2.0.1
+    '011111': '100001',  # 1.3.3 -> 2.0.1
+    '100010': '100100',  # 2.0.2 -> 2.1.0
+    '100011': '100100',  # 2.0.3 -> 2.1.0
+
+}
+
+for k, v in test2.items():
+    nji = next_jmp_in(k[::-1])
+    if nji == v[::-1]:
+        print('OK: {} -> {}'.format(k, nji[::-1]))
+    else:
+        print('FAIL: {} -> {}. Got: {}'.format(k, v, nji[::-1]))
+
 
