@@ -197,12 +197,15 @@ sk:drop()
 После чего производилось $N_{q}$ запросов,
 и измерялось время, за которое они все были исполнены.
 
+\begin{figure}
+\centering
+\label{img:insert_rtree}
+\caption{Сравнение скорости вставки в R-Tree и Z-order curve индексы}
 \begin{tikzpicture}
 % Package PGFPLOTS manual p.84
 \begin{axis}[
 ybar,
-enlargelimits=0.15,
-legend style={at={(0.5,-0.15)},
+legend style={at={(0.5,-0.1)},
 	anchor=north,legend columns=-1},
 ylabel={Время вставки в секундах},
 xlabel={Размерность},
@@ -210,9 +213,9 @@ symbolic x coords={1, 2, 3, 5, 10, 15, 18, 20},
 xtick=data,
 nodes near coords,
 nodes near coords align={vertical},
-width  = \textwidth * 0.95,
-enlarge y limits  = 0.1,
+width  = \textwidth,
 enlarge x limits  = 0.1,
+scaled y ticks = false,
 ]
 \addplot +[bar shift=-12pt] coordinates {
 	(1,1.95)
@@ -237,13 +240,16 @@ enlarge x limits  = 0.1,
 \legend{R-Tree, Z-order curve}
 \end{axis}
 \end{tikzpicture}
+\end{figure}
 
+\begin{figure}
+\centering
+\label{img:mem_rtree}
 \begin{tikzpicture}
 % Package PGFPLOTS manual p.84
 \begin{axis}[
 ybar,
-enlargelimits=0.15,
-legend style={at={(0.5,-0.15)},
+legend style={at={(0.5,-0.1)},
 	anchor=north,legend columns=-1},
 ylabel={Потребляемая память в мегабайтах},
 xlabel={Размерность},
@@ -251,9 +257,9 @@ symbolic x coords={1, 2, 3, 5, 10, 15, 18, 20},
 xtick=data,
 nodes near coords,
 nodes near coords align={vertical},
-width  = \textwidth * 0.9,
-enlarge y limits  = 0.1,
+width  = \textwidth,
 enlarge x limits  = 0.1,
+restrict y to domain=0:500,
 ]
 \addplot +[bar shift=-10pt] coordinates {
 	(1, 36)
@@ -278,13 +284,16 @@ enlarge x limits  = 0.1,
 \legend{R-Tree,Z-order curve}
 \end{axis}
 \end{tikzpicture}
+\end{figure}
 
+\begin{figure}
+\centering
 \begin{tikzpicture}
+\label{img:select_rtree}
 % Package PGFPLOTS manual p.84
 \begin{axis}[
 ybar,
-enlargelimits=0.15,
-legend style={at={(0.5,-0.15)},
+legend style={at={(0.5,-0.1)},
 	anchor=north,legend columns=-1},
 ylabel={Время выборки в секундах},
 xlabel={Размерность},
@@ -292,8 +301,7 @@ symbolic x coords={1, 2, 3, 5, 10, 15, 18, 20},
 xtick=data,
 nodes near coords,
 nodes near coords align={vertical},
-width  = \textwidth * 0.9,
-enlarge y limits  = 0.1,
+width  = \textwidth,
 enlarge x limits  = 0.1,
 ]
 \addplot +[bar shift=-10pt] coordinates {
@@ -319,3 +327,37 @@ enlarge x limits  = 0.1,
 \legend{R-Tree,Z-order curve}
 \end{axis}
 \end{tikzpicture}
+\end{figure}
+
+Дадим интерпретацию полученным результатам. Во-первых, как видно
+из рис.~\ref{img:insert_rtree} скорость вставки в Z-order curve индекс выше, чем в R-Tree. Данный тренд сохраняется и при увеличении размерности. На практике однако результат не особо релевантен,
+поскольку, как было отмечено выше, тест проводился с выключенным WAL.
+
+С точки зрения расхода памяти оптимальнее Z-order curve.
+Причем на больших размерностях практически в три раза.
+Это уже можно считать положительным результатом, поскольку
+объем оперативной памяти обычно ограничен.
+
+Последний график, показывающий время выполнения запросов на чтение наиболее интересен.
+Как видно примерно до размерности 5 время уменьшается,
+после чего для R-Tree остается практически постоянным, а для Z-order
+curve начинает драматически возрастать.
+Дело в том, что при одинаковом количестве точек с увеличением размерности
+начинает падать селективность наших запросов. Больше размерностей ---
+меньше вероятность того, что координаты точки попадут в интервал между
+границами запроса. Для R-Tree низкая селективность некритична,
+поэтому в конце время выполнения запросов практически одинаково.
+Совершенно иначе обстоит дело с Z-order Curve.
+Как только итератор натыкается на точку, лежащую вне границ поиска
+вычисляется Z-адрес следующего вхождения в указанную область.
+После этого совершается прыжок --- спуск по дереву в эту точку.
+Если данной точки не существует, то мы попадем в следующую по порядку.
+Данная точка снова может лежать вне области поиска, тогда ситуация будет повторяться вновь и вновь. Это обоснование правой части графика.
+Слева при высокой селективности большая часть времени может тратится
+не на сам поиск, а на то, чтобы упаковать данные и вернуть их клиенту.
+При работе с внешними коннекторами --- это пересылка по сети,
+при доступе из Lua-приложения это дополнительная работа по сериализации/десериализации Lua-объектов перед возвратом пользователю.
+Также, если при спуске по R-дереву понять принадлежность точки/области гиперкубу 
+можно за количество операций, зависящих от размерности,
+то при работе с Z-адресами алгоритмы линейно зависят от длины этого адреса ---
+размерность, умноженная на достаточно большую константу 64.
