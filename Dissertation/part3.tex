@@ -13,11 +13,11 @@
 в результате перемешивания битов указанных индексируемых полей.
 Данную структуру будем называть битовый массив. При реализации прототипа
 было решено найти и использовать готовую реализацию на языке С.
-Реализация была найдена --- \url{https://github.com/noporpoise/BitArray},
-она удовлетворяла необходимым функциональным потребностям, однако имела
-достаточно небольшое покрытие тестами, содержала баги, которые пришлось
-исправить --- \url{https://github.com/noporpoise/BitArray/pull/15} и
-была достаточно неоптимальной с учетом специфики решаемой задачи.
+Был выбран проект \url{https://github.com/noporpoise/BitArray},
+который удовлетворял функциональным потребностям,
+однако имел достаточно небольшое покрытие тестами,
+содержал дефекты, которые пришлось исправлять --- \url{https://github.com/noporpoise/BitArray/pull/15}.
+Также возникали вопросы к производительности и оптимальности данного решения.
 
 С учетом того, что для хранения и представления
 большинства типов используется $64$ бита, размер массива всегда будет
@@ -45,11 +45,20 @@
 однако это не дает гарантий, что цикл будет векторизован,
 компилятор может и проигнорировать данную директиву, к тому же
 большинство современных компиляторов могут автоматически находить
-векторизуемые циклы. Посмотреть за тем, векторизуется цикл или нет,
+векторизуемые циклы.
+Посмотреть за тем, векторизуется цикл или нет,
 можно с помощью специальных опций компилятора.
-
 Циклы для операций AND и OR были векторизованы для компиляторов
 GCC v7.4.0 и Apple Clang v11.0.0.
+
+Частая вставка данных в индекс предполагает частые выделения памяти,
+что при наивном подходе может привести к большому количеству системных
+вызовов <<syscall>>, являющихся достаточно медленными операциями.
+Гораздо оптимальнее использовать специализированные аллокаторы ---
+сущности, занимающиеся выделением/освобождением памяти с минимальным количеством системных вызовов.
+Специфика задачи --- выделение большого количества одинаковых по размеру участков памяти.
+Под эту задачу оптимизирован уже имеющийся в Tarantool аллокатор ---
+mempool <<memory pool>>.
 
 \subsection{Bit interleaving}
 Поскольку одной из ключевых операций является перемешивание битов, эта функциональность была добавлена для битового массива.
@@ -401,7 +410,7 @@ CXX\_FLAGS: -Wno-unknown-pragmas -fexceptions -funwind-tables -fno-omit-frame-po
 \begin{figure}
 	\centering
 	\label{img:select_rtree_normal}
-	\caption{Сравнение скорости выборки для R-Tree и Z-order curve индексов}
+	\caption{Сравнение скорости высокоселективной выборки для R-Tree и Z-order curve индексов}
 	\begin{tikzpicture}
 	% Package PGFPLOTS manual p.84
 	\begin{axis}[
@@ -462,7 +471,7 @@ CXX\_FLAGS: -Wno-unknown-pragmas -fexceptions -funwind-tables -fno-omit-frame-po
 	enlarge x limits  = 0.1,
 	scaled y ticks = false,
 	]
-	\addplot +[bar shift=+12pt] coordinates {
+	\addplot +[bar shift=0pt] coordinates {
 		(1,399491)
 		(2,159021)
 		(3,63951)
@@ -525,6 +534,7 @@ scaled y ticks = false,
 \begin{figure}
 \centering
 \label{img:mem_rtree}
+\caption{Сравнение памяти, потребляемой индексами}
 \begin{tikzpicture}
 % Package PGFPLOTS manual p.84
 \begin{axis}[
@@ -693,6 +703,23 @@ curve начинает драматически возрастать.
 то при работе с Z-адресами алгоритмы линейно зависят от длины этого адреса ---
 размерность, умноженная на достаточно большую константу --- 64.
 
+С помощью утилиты "perf top" был проведен анализ функций,
+потребляющих наибольшее процессорное время.
+Полученные результаты лишь подтвердили всё вышесказанное
+(см. рис.~\ref{img:perf_top}).
+
+\begin{figure}[h]
+	\begin{minipage}[h]{\linewidth}
+		\center{\includegraphics[width=1\linewidth]{perf-top-select} \\ а) выборка}
+	\end{minipage}
+	\vfill
+	\begin{minipage}[h]{\linewidth}
+		\center{\includegraphics[width=1\linewidth]{perf-top-insert} \\ б) вставка}
+	\end{minipage}
+	\caption{Потребление процессорного времени}
+	\label{img:perf_top}
+\end{figure}
+
 \section{Сравнение с B-Tree. Поиск точек внутри гиперкуба}
 
 \subsubsection{Описание среды и условий проведения измерений}
@@ -701,6 +728,7 @@ curve начинает драматически возрастать.
 
 \begin{figure}
 	\centering
+	\caption{Сравнение скорости выборки для B-Tree и Z-order curve индексов в случае нормального распределения данных}
 	\begin{tikzpicture}
 	\label{img:select_btree_normal}
 	% Package PGFPLOTS manual p.84
@@ -744,6 +772,7 @@ curve начинает драматически возрастать.
 
 \begin{figure}
 	\centering
+	\caption{Селективность тестовых запросов}
 	\begin{tikzpicture}
 	\label{img:select_btree_normal_selection}
 	% Package PGFPLOTS manual p.84
@@ -751,7 +780,7 @@ curve начинает драматически возрастать.
 	ybar,
 	legend style={at={(0.5,-0.1)},
 		anchor=north,legend columns=-1},
-	ylabel={Селективность тестовых запросов, количество кортежей},
+	ylabel={Количество кортежей},
 	xlabel={Размерность},
 	symbolic x coords={1, 2, 3, 5, 10, 15, 18, 20},
 	xtick=data,
@@ -760,7 +789,7 @@ curve начинает драматически возрастать.
 	width  = \textwidth,
 	enlarge x limits  = 0.1,
 	]
-	\addplot +[bar shift=-10pt] coordinates {
+	\addplot +[bar shift=0] coordinates {
 		(1, 399491)
 		(2, 159021)
 		(3, 63951)
@@ -796,6 +825,7 @@ curve начинает драматически возрастать.
 Результаты приведены на рис.~\ref{img:select_btree_highselective}
 \begin{figure}
 	\centering
+	\caption{Сравнение скорости высокоселективной выборки для B-Tree и Z-order curve индексов}
 	\begin{tikzpicture}
 	\label{img:select_btree_highselective}
 	% Package PGFPLOTS manual p.84
